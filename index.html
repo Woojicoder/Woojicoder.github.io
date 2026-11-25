@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rigel Salinas · A little space to grow</title>
+<meta name="description" content="Rigel Salinas — a personal learning journey in AI and Cloud Computing.">
+<meta name="theme-color" content="#e3eefa">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e3eefa; --bg2:#d3e6f9; --card:#ffffff; --ink:#4a3a33; --muted:#7a675e;
+  --blue:#b9d9f5; --blue-d:#8fbfe8; --pink:#f8d9e4; --pink-d:#f2a9c4; --accent:#b0305f;
+  --shadow:var(--pink); --radius:28px;
+  --head:'Fredoka','Trebuchet MS',sans-serif; --body:'Nunito',system-ui,sans-serif;
+}
+:root[data-theme="night"]{
+  --bg:#1f2540; --bg2:#272e50; --card:#2d3459; --ink:#f4e9ee; --muted:#b9b4d1;
+  --blue:#3f5a8c; --blue-d:#6f93cf; --pink:#6b3a5a; --pink-d:#f08fb4; --accent:#ffb3cf;
+  --shadow:#151a30;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);color:var(--ink);background:var(--bg);line-height:1.6;overflow-x:hidden;transition:background .4s,color .4s}
+a{color:inherit}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:#fff;padding:8px 14px;border-radius:12px;z-index:100}
+.skip:focus{left:8px}
+:focus-visible{outline:3px dashed var(--accent);outline-offset:3px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+h1,h2,h3,h4{font-family:var(--head);line-height:1.1;letter-spacing:-.01em}
+
+/* floating hearts / stars background */
+.float{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.float span{position:absolute;bottom:-40px;font-size:20px;opacity:.55;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-115vh) rotate(25deg);opacity:0}}
+main,header,footer{position:relative;z-index:1}
+
+/* nav */
+nav{position:sticky;top:12px;z-index:50;margin:14px auto 0;max-width:1080px;padding:0 22px}
+.nav-in{display:flex;align-items:center;gap:10px;background:var(--card);border:3px solid var(--ink);border-radius:999px;padding:8px 10px 8px 20px;box-shadow:5px 5px 0 var(--shadow)}
+.logo{font-family:var(--head);font-weight:700;font-size:1.25rem;text-decoration:none;margin-right:auto}
+.logo i{color:var(--pink-d);font-style:normal}
+.nav-in a.l{font-weight:700;text-decoration:none;padding:6px 14px;border-radius:999px;font-size:.95rem}
+.nav-in a.l:hover,.nav-in a.l.on{background:var(--pink)}
+.tbtn{border:3px solid var(--ink);background:var(--blue);color:var(--ink);border-radius:999px;width:42px;height:42px;font-size:1.1rem;cursor:pointer;transition:transform .2s}
+.tbtn:hover{transform:rotate(20deg) scale(1.08)}
+@media(max-width:700px){.nav-in a.l{display:none}}
+
+/* buttons / chips */
+.btn{display:inline-flex;align-items:center;gap:8px;font:700 1rem var(--body);text-decoration:none;color:var(--ink);background:var(--pink);border:3px solid var(--ink);border-radius:999px;padding:12px 24px;box-shadow:4px 4px 0 var(--ink);transition:transform .15s,box-shadow .15s;cursor:pointer}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.alt{background:var(--card)}
+.chip{display:inline-block;font:800 .72rem var(--body);letter-spacing:.14em;text-transform:uppercase;background:var(--blue);border:2px solid var(--ink);border-radius:999px;padding:6px 16px}
+.chip.pk{background:var(--pink)}
+.card{background:var(--card);border:3px solid var(--ink);border-radius:var(--radius);box-shadow:8px 8px 0 var(--shadow)}
+
+/* hero */
+.hero{padding:56px 0 30px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:center;padding:44px;position:relative}
+.hero h1{font-size:clamp(2.6rem,7vw,4.9rem);margin:18px 0 14px}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--pink-d) 62%);padding:0 6px}
+.hero p.lead{font-size:1.18rem;color:var(--muted);max-width:30em;margin-bottom:24px}
+.role{font-weight:800;color:var(--accent)}
+.cta{display:flex;flex-wrap:wrap;gap:14px}
+.mascot{position:relative;display:grid;place-items:center}
+.mascot svg{width:min(320px,80%);height:auto;overflow:visible;animation:bob 4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-10px)}}
+.bubble{position:absolute;top:2%;right:4%;background:var(--card);border:3px solid var(--ink);border-radius:20px 20px 20px 4px;padding:6px 16px;font:700 .95rem var(--head);transform:rotate(6deg);animation:pop 3s ease-in-out infinite}
+@keyframes pop{50%{transform:rotate(-3deg) scale(1.06)}}
+.marquee{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.marquee span{background:var(--card);border:2px dashed var(--ink);border-radius:999px;padding:6px 18px;font-weight:800;font-size:.9rem}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr;padding:28px}.mascot{order:-1}}
+
+/* sections */
+section{padding:70px 0 10px}
+.sec-head{margin-bottom:30px}
+.sec-head h2{font-size:clamp(2rem,5vw,3.1rem);margin-top:12px}
+.sec-head p{color:var(--muted);max-width:36em;margin-top:8px}
+.eyebrow{font:800 .78rem var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.panel{padding:28px}
+.panel h3{font-size:1.5rem;margin:6px 0 16px}
+.strengths{display:grid;gap:12px;list-style:none}
+.strengths li{display:flex;gap:14px;align-items:flex-start;background:var(--bg);border-radius:18px;padding:12px 16px}
+.strengths b{display:block;font-family:var(--head);font-size:1.05rem}
+.strengths small{color:var(--muted);font-size:.9rem}
+.ico{font-size:1.5rem;line-height:1.3}
+.skill{display:flex;align-items:center;gap:10px;margin:12px 0;font-weight:700}
+.skill span:first-child{flex:1}
+.dots{display:flex;gap:6px}
+.dots i{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--ink);background:var(--card);transition:background .3s .05s}
+.dots i.f{background:var(--pink-d)}
+.dots.pre i.f{background:var(--card)}
+.owl-note{display:flex;gap:16px;align-items:center;margin-top:26px;padding:20px 24px;background:var(--blue);border:3px solid var(--ink);border-radius:var(--radius);box-shadow:8px 8px 0 var(--pink)}
+.owl-note .em{font-size:2.4rem}
+.owl-note h4{font-size:1.25rem}
+@media(max-width:820px){.about-grid{grid-template-columns:1fr}}
+
+/* works */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.filters button{font:800 .92rem var(--body);color:var(--ink);background:var(--card);border:3px solid var(--ink);border-radius:999px;padding:8px 20px;cursor:pointer;transition:.15s}
+.filters button[aria-pressed="true"]{background:var(--pink);box-shadow:3px 3px 0 var(--ink)}
+.works{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:26px}
+.work{padding:26px;display:flex;flex-direction:column;gap:12px;transition:transform .2s,box-shadow .2s}
+.work:hover{transform:translate(-3px,-5px) rotate(-.6deg);box-shadow:12px 12px 0 var(--shadow)}
+.work h3{font-size:1.45rem}
+.work p{color:var(--muted);font-size:.98rem}
+.work .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.work .tag{font:800 .72rem var(--body);background:var(--bg);border-radius:999px;padding:4px 12px}
+.work .top{display:flex;justify-content:space-between;align-items:center}
+.status{font:800 .72rem var(--body);letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--ink);border-radius:999px;padding:3px 12px;background:var(--blue)}
+.status.prog{background:var(--pink)}
+.work.hide{display:none}
+.work a.go{font-weight:800;text-decoration:none;color:var(--accent)}
+.work a.go:hover{text-decoration:underline}
+
+/* plan / tracker */
+.plan-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:26px}
+.plan-table{overflow:hidden}
+.plan-row{display:grid;grid-template-columns:130px 1fr;border-top:3px solid var(--ink)}
+.plan-row:first-child{border-top:0}
+.plan-row dt{background:var(--blue);padding:18px;font:800 .75rem var(--body);letter-spacing:.14em;text-transform:uppercase}
+.plan-row:nth-child(2) dt{background:var(--pink)}
+.plan-row dd{padding:18px 22px;font-size:.98rem;border-left:3px solid var(--ink)}
+.plan-row dd b{font-family:var(--head);font-size:1.1rem}
+.tracker{padding:26px}
+.tracker h3{font-size:1.5rem;margin-bottom:14px}
+.week{margin-bottom:18px}
+.week h4{font-size:1.1rem;margin-bottom:8px}
+.hearts{display:flex;align-items:center;gap:10px}
+.heart{width:54px;height:54px;border:0;background:none;cursor:pointer;transition:transform .2s}
+.heart svg{width:100%;height:100%;overflow:visible}
+.heart path{fill:var(--card);stroke:var(--ink);stroke-width:3.5;stroke-linejoin:round;transition:fill .25s}
+.heart[aria-pressed="true"] path{fill:var(--pink-d)}
+.heart:nth-child(even)[aria-pressed="true"] path{fill:var(--blue-d)}
+.heart:hover{transform:scale(1.12) rotate(-6deg)}
+.heart.pulse{animation:beat .4s}
+@keyframes beat{40%{transform:scale(1.35)}}
+.count{margin-left:auto;font:700 1rem var(--head)}
+.bar{height:16px;border:3px solid var(--ink);border-radius:999px;background:var(--bg);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink-d),var(--blue-d));transition:width .5s}
+.checks{margin-top:20px;padding:18px 20px;background:var(--pink);border:3px solid var(--ink);border-radius:20px}
+.checks h4{margin-bottom:8px}
+.checks ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-weight:700;font-size:.93rem}
+.checks li::before{content:"♡ "}
+.reset{margin-top:12px;background:none;border:0;font:700 .85rem var(--body);color:var(--muted);text-decoration:underline;cursor:pointer}
+@media(max-width:900px){.plan-wrap{grid-template-columns:1fr}.plan-row{grid-template-columns:1fr}.plan-row dd{border-left:0;border-top:3px solid var(--ink)}}
+
+/* reflection */
+.refl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;margin-top:26px}
+.refl .card{padding:28px 24px 24px}
+.refl .chip{margin-bottom:14px}
+.refl p{color:var(--muted)}
+
+/* next */
+.next-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.path{list-style:none;position:relative;padding-left:30px;margin-top:8px}
+.path::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;border-left:3px dashed var(--ink)}
+.path li{position:relative;margin-bottom:18px}
+.path li::before{content:"";position:absolute;left:-30px;top:5px;width:16px;height:16px;border-radius:50%;background:var(--pink-d);border:3px solid var(--ink)}
+.path.grow li::before{background:var(--blue-d)}
+.path b{display:block;font-family:var(--head);font-size:1.1rem}
+.path span{color:var(--muted);font-size:.95rem}
+@media(max-width:820px){.next-grid{grid-template-columns:1fr}}
+
+/* footer */
+.outro{text-align:center;padding:30px 24px 36px;margin-top:70px}
+.outro h2{font-size:clamp(1.8rem,5vw,2.8rem);margin:12px 0}
+.outro p{color:var(--muted);margin-bottom:22px}
+footer{margin-top:60px;background:var(--ink);color:#f4e9ee;padding:20px 0;font-size:.88rem}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer b{color:var(--pink-d)}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}.reveal{opacity:1;transform:none}.float{display:none}
+}
+
+/* helpers + edit mode */
+.gone{display:none!important}
+.photo{width:min(300px,80%);aspect-ratio:1;object-fit:cover;border:4px solid var(--ink);border-radius:46% 54% 50% 50%/52% 48% 54% 46%;box-shadow:10px 10px 0 var(--pink-d);animation:bob 4s ease-in-out infinite}
+.edbtn{position:fixed;right:18px;bottom:18px;z-index:150}
+.editor{position:fixed;top:0;right:0;bottom:0;width:min(390px,100vw);z-index:200;display:flex;flex-direction:column;background:var(--card);color:var(--ink);border-left:3px solid var(--ink);box-shadow:-8px 0 0 var(--shadow)}
+.ed-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:3px solid var(--ink);background:var(--pink);font:700 1.2rem var(--head)}
+.ed-head button{border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:50%;width:34px;height:34px;cursor:pointer;font-weight:800}
+.ed-body{flex:1;overflow:auto;padding:14px 18px}
+.ed-tip{background:var(--blue);border:2px solid var(--ink);border-radius:14px;padding:10px 12px;font-size:.9rem;margin-bottom:14px}
+.editor details{border:2px solid var(--ink);border-radius:16px;margin-bottom:12px;padding:10px 14px;background:var(--bg)}
+.editor summary{font:700 1.05rem var(--head);cursor:pointer}
+.editor details[open]>summary{margin-bottom:10px}
+.editor label{display:block;font-weight:700;font-size:.85rem;margin:10px 0 0}
+.editor input:not([type=color]):not([type=file]),.editor textarea,.editor select{display:block;width:100%;margin-top:4px;font:inherit;font-weight:400;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:10px;padding:7px 10px}
+.editor input[type=file]{margin-top:6px;font-size:.85rem;max-width:100%}
+.editor small{display:block;color:var(--muted);margin-top:8px;font-size:.8rem}
+.ed-color{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ed-color input{width:46px;height:32px;border:2px solid var(--ink);border-radius:8px;padding:0;background:none;cursor:pointer}
+.ed-item{background:var(--card)!important}
+.ed-skill{display:grid;grid-template-columns:1fr 64px 40px;gap:8px;margin-bottom:8px;align-items:center}
+.ed-skill input{margin:0!important}
+.ed-mini{margin-top:12px;font:700 .85rem var(--body);color:var(--ink);background:var(--pink);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
+.ed-mini.danger{background:var(--card)}
+.ed-skill .ed-mini{margin:0;padding:6px 0}
+.ed-foot{padding:14px 18px;border-top:3px solid var(--ink);background:var(--bg)}
+.ed-foot .btn{width:100%;justify-content:center}
+.ed-foot p{font-size:.82rem;color:var(--muted);margin:10px 0 4px}
+.ed-link{background:none;border:0;color:var(--muted);text-decoration:underline;font:700 .82rem var(--body);cursor:pointer}
+body.editing [contenteditable="true"]{cursor:text;border-radius:6px}
+body.editing [contenteditable="true"]:hover{outline:2px dashed var(--accent);outline-offset:3px}
+body.editing [contenteditable="true"]:focus{outline:2px solid var(--accent);outline-offset:3px}
+@media(min-width:900px){body.editing{padding-right:0}}
+</style>
+<style id="custom"></style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="float" id="float" aria-hidden="true"></div>
+
+<nav aria-label="Main">
+  <div class="nav-in">
+    <a class="logo" href="#top">rigel <i>✿</i></a>
+    <a class="l" href="#about">About me</a>
+    <a class="l" href="#works">My journey</a>
+    <a class="l" href="#plan">My plan</a>
+    <a class="l" href="#next">What's next</a>
+    <button class="tbtn" id="theme" aria-label="Switch day and night mode" title="Day / night">☾</button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="card hero-grid">
+      <div>
+        <span class="chip">IR001 · Future-Ready Tech Portfolio</span>
+        <h1>Hi, I'm <em>Rigel</em>.</h1>
+        <p class="lead"><span class="role" id="typed">aspiring tech professional</span><br>
+        <span id="leadtxt">Learning AI and Cloud Computing, one little step at a time, and getting better at speaking up along the way.</span></p>
+        <div class="cta">
+          <a class="btn" href="#works">Explore my work ✦</a>
+          <a class="btn alt" href="#about">Get to know me</a>
+        </div>
+      </div>
+      <div class="mascot">
+        <img id="photo" class="photo gone" alt="Rigel">
+        <div class="bubble" id="bubble">hi hi!</div>
+        <svg id="owl" viewBox="0 0 240 270" role="img" aria-label="A friendly cartoon owl">
+          <g stroke="#4a3a33" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M52 92 L44 36 L102 70 Z" fill="#b9d9f5"/>
+            <path d="M188 92 L196 36 L138 70 Z" fill="#b9d9f5"/>
+            <ellipse cx="120" cy="158" rx="84" ry="88" fill="#ffffff"/>
+            <ellipse cx="120" cy="188" rx="50" ry="56" fill="#d3e6f9" stroke-width="4"/>
+            <path d="M40 150 Q10 175 34 214 Q62 200 66 160 Z" fill="#b9d9f5"/>
+            <path d="M200 150 Q230 175 206 214 Q178 200 174 160 Z" fill="#b9d9f5"/>
+            <circle cx="88" cy="122" r="29" fill="#fff"/>
+            <circle cx="152" cy="122" r="29" fill="#fff"/>
+            <path d="M110 142 L130 142 L120 160 Z" fill="#f2a9c4"/>
+            <ellipse cx="96" cy="256" rx="20" ry="9" fill="#f8d9e4"/>
+            <ellipse cx="144" cy="256" rx="20" ry="9" fill="#f8d9e4"/>
+          </g>
+          <ellipse cx="62" cy="152" rx="13" ry="8" fill="#f2a9c4" opacity=".6"/>
+          <ellipse cx="178" cy="152" rx="13" ry="8" fill="#f2a9c4" opacity=".6"/>
+          <g class="eye" data-cx="88" data-cy="122"><circle class="pupil" cx="88" cy="124" r="12" fill="#4a3a33"/><circle class="shine" cx="84" cy="119" r="4" fill="#fff"/></g>
+          <g class="eye" data-cx="152" data-cy="122"><circle class="pupil" cx="152" cy="124" r="12" fill="#4a3a33"/><circle class="shine" cx="148" cy="119" r="4" fill="#fff"/></g>
+          <path d="M104 196 q8 -10 16 0 q8 -10 16 0 q-2 12 -16 24 q-14 -12 -16 -24 z" fill="#f2a9c4" stroke="#4a3a33" stroke-width="4" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="marquee" aria-label="Quick facts">
+      <span>✦ a work in progress</span><span>♡ learning with intention</span><span>✧ building my tomorrow</span>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">The person behind the projects</span>
+      <h2>A little about me.</h2>
+      <p>CS 101 student at CIIT College of Arts and Technology. Always room to grow, and I'm keeping track of how.</p>
+    </div>
+    <div class="about-grid">
+      <div class="card panel reveal">
+        <span class="chip pk">What I bring</span>
+        <h3>My personal strengths</h3>
+        <ul class="strengths">
+          <li><span class="ico">🦉</span><div><b>Win-win thinker</b><small>I'm a Collaborating Owl: I look for solutions where everyone's needs count.</small></div></li>
+          <li><span class="ico">🪞</span><div><b>Reflective</b><small>I write down what happened, what I learned, and what I'll do next.</small></div></li>
+          <li><span class="ico">🌱</span><div><b>Growth-minded</b><small>I pick one small habit, practice it, and track it.</small></div></li>
+        </ul>
+      </div>
+      <div class="card panel reveal">
+        <span class="chip">My growing toolkit</span>
+        <h3>Skills I'm developing</h3>
+        <div id="skills"></div>
+      </div>
+    </div>
+    <div class="owl-note reveal">
+      <div class="em">🦉</div>
+      <div><h4>Fun fact: I got Owl on the animal test, both times.</h4>
+      <p>Owls look for a win-win, which takes time and effort. That's why my current goal is to speak up early.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Learning, reflecting, becoming</span>
+      <h2>Pieces of my journey.</h2>
+      <p>A collection of self-development work and small steps into the world of tech.</p>
+    </div>
+    <div class="filters reveal" role="group" aria-label="Filter works">
+      <button aria-pressed="true" data-f="all">Everything</button>
+      <button aria-pressed="false" data-f="self">Self-development</button>
+      <button aria-pressed="false" data-f="tech">Tech &amp; learning</button>
+    </div>
+    <div class="works" id="worksGrid"></div>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section id="plan">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Self-Development Plan 2 · Conflict Management</span>
+      <h2>Focus on shared goals.</h2>
+      <p>My two-week plan to stay in the conversation and work toward a win-win. Tap the hearts to log a session.</p>
+    </div>
+    <div class="plan-wrap">
+      <dl class="card plan-table reveal">
+        <div class="plan-row"><dt>Focus area</dt><dd><b>Collaborating Owl:</b> focus on shared goals, especially with people I'm not close to.</dd></div>
+        <div class="plan-row"><dt>Reason</dt><dd>Teamwork is easy with people I know, but with people I'm not close to I tend to go quiet and go along with what others say. An Owl only gets a win-win by speaking up, and a shared-goal sentence is a safe, easy way to join in.</dd></div>
+        <div class="plan-row"><dt>Goal</dt><dd>With people I'm not close to (new groupmates, classmates, or random teammates online), I'll say one shared-goal sentence at the start, like "What's the goal for this match?" I'll log each time with a 1–5 rating, at least <b>3 times a week for two weeks</b>.</dd></div>
+      </dl>
+      <div class="card tracker reveal">
+        <h3>Progress tracker</h3>
+        <div class="week"><h4>Week 1</h4>
+          <div class="hearts" data-week="1">
+            <button class="heart" aria-pressed="true" aria-label="Week 1, session 1"></button>
+            <button class="heart" aria-pressed="true" aria-label="Week 1, session 2"></button>
+            <button class="heart" aria-pressed="true" aria-label="Week 1, session 3"></button>
+            <span class="count">3 / 3</span>
+          </div><div class="bar"><i></i></div>
+        </div>
+        <div class="week"><h4>Week 2</h4>
+          <div class="hearts" data-week="2">
+            <button class="heart" aria-pressed="true" aria-label="Week 2, session 1"></button>
+            <button class="heart" aria-pressed="true" aria-label="Week 2, session 2"></button>
+            <button class="heart" aria-pressed="true" aria-label="Week 2, session 3"></button>
+            <span class="count">3 / 3</span>
+          </div><div class="bar"><i></i></div>
+        </div>
+        <div class="checks"><h4>Check each time I log</h4>
+          <ul><li>I stated the shared goal</li><li>I listened before replying</li><li>I stayed calm in a disagreement</li><li>I rated how it went (1–5)</li></ul>
+        </div>
+        <button class="reset" id="reset">reset tracker</button>
+      </div>
+    </div>
+
+    <div class="sec-head reveal" style="margin-top:56px"><span class="eyebrow">Part 2</span><h2 style="font-size:2.2rem">My reflection</h2></div>
+    <div class="refl">
+      <div class="card reveal"><span class="chip">What I realized</span><p>With friends, speaking up is easy. With people I'm not close to, I tend to stay quiet, and a shared goal can be a simple way in.</p></div>
+      <div class="card reveal"><span class="chip pk">How it changed my approach</span><p>Naming the shared goal first helps me listen before reacting. Disagreements feel less like me versus them, and more like us solving the same problem.</p></div>
+      <div class="card reveal"><span class="chip">What I'll keep doing</span><p>I'll keep restating the goal in every group task and keep logging it. It's a small habit that will matter in school projects and later in work teams.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT -->
+<section id="next">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">A future I'm working toward</span>
+      <h2>Growing with a purpose.</h2>
+      <p>My direction, my next steps, and the habits that will get me there.</p>
+    </div>
+    <div class="next-grid">
+      <div class="card panel reveal">
+        <span class="chip pk">My career direction</span>
+        <h3>Where I am now</h3>
+        <ul class="path">
+          <li><b>Learning the fundamentals</b><span>CS 101 · Introduction to Computing at CIIT.</span></li>
+          <li><b>Building habits</b><span>Speaking up early and reflecting after group work.</span></li>
+          <li><b>Showing my work</b><span>This portfolio, my first public step.</span></li>
+        </ul>
+      </div>
+      <div class="card panel reveal">
+        <span class="chip">Next stops</span>
+        <h3>Where I want to grow</h3>
+        <ul class="path grow">
+          <li><b>AI literacy</b><span>Understand how modern AI tools work and how to use them well.</span></li>
+          <li><b>Cloud Computing</b><span>Learn the basics of how apps run and scale online.</span></li>
+          <li><b>Teamwork at work</b><span>Bring the win-win habit into real teams and projects.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card outro reveal">
+      <span class="chip">Thanks for stopping by</span>
+      <h2>Here's to the next little step. ♡</h2>
+      <p>Learning today. Building tomorrow.</p>
+      <a class="btn" href="#top">Back to top ↑</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>IR001 · <b>My Future-Ready Tech Portfolio</b></span>
+    <span>Module 6 · Ask for help early. ♡</span>
+  </div>
+</footer>
+
+<button id="edBtn" class="btn edbtn gone" type="button">✎ Customize</button>
+<aside id="editor" class="editor gone" aria-label="Customize this site">
+  <div class="ed-head"><b>Customize ♡</b><button id="edClose" type="button" aria-label="Close panel">✕</button></div>
+  <div class="ed-body">
+    <p class="ed-tip">✎ Tip: with this panel open, <b>click any text on the page</b> to retype it.</p>
+
+    <details open><summary>Hero</summary>
+      <label>Rotating words (separate with commas)<input id="edWords"></label>
+      <label>Hero picture (optional)<input id="edPhoto" type="file" accept="image/*"></label>
+      <button type="button" class="ed-mini" id="edNoPhoto">Use the owl instead</button>
+      <small>Pictures are cropped to a square and stored inside your website file, so anyone can see them once published.</small>
+    </details>
+
+    <details><summary>Colors</summary>
+      <div id="edColors"></div>
+      <button type="button" class="ed-mini" id="edColorReset">Reset colors</button>
+    </details>
+
+    <details><summary>Projects</summary>
+      <div id="edWorks"></div>
+      <button type="button" class="ed-mini" id="addWork">+ Add project</button>
+    </details>
+
+    <details><summary>Skills</summary>
+      <div id="edSkills"></div>
+      <button type="button" class="ed-mini" id="addSkill">+ Add skill</button>
+    </details>
+  </div>
+  <div class="ed-foot">
+    <button type="button" class="btn" id="edDownload">⬇ Download website</button>
+    <p>Your changes save in this browser automatically. To publish: download, then upload the new <b>index.html</b> to your GitHub repo.</p>
+    <button type="button" class="ed-link" id="edReset">Reset my draft</button>
+  </div>
+</aside>
+
+<script id="app">
+/* ================== YOUR CONTENT ==================
+   Easiest way to change it: open this page on your computer (or add ?edit to the web address),
+   then click ✎ Customize. You can also edit the block below by hand. */
+/*CFG_START*/
+const CFG = {
+ "words": ["aspiring tech professional", "AI & Cloud learner", "win-win Owl", "always growing"],
+ "skills": [["Collaboration", 4], ["Reflection", 4], ["HTML & CSS", 3], ["Cloud basics", 2], ["AI literacy", 2]],
+ "works": [
+  {"t": "Focus on Shared Goals", "c": "self", "s": "Done", "d": "A two-week Conflict Management plan: state one shared goal with people I'm not close to, then log and rate it.", "tags": ["Self-development", "Conflict management"], "link": "#plan", "label": "See the plan →"},
+  {"t": "My Future-Ready Tech Portfolio", "c": "tech", "s": "Live", "d": "IR001 portfolio: a little space to learn and grow, built with HTML, CSS and a bit of JavaScript.", "tags": ["Web", "Portfolio"], "link": "#top", "label": "You're here ✿"},
+  {"t": "CS 101 · Intro to Computing", "c": "tech", "s": "In progress", "d": "My foundation course at CIIT: how computers think, and how to tell them what to do.", "tags": ["Coursework", "Fundamentals"], "link": "", "label": ""},
+  {"t": "AI & Cloud learning notes", "c": "tech", "s": "In progress", "d": "Notes and small experiments as I explore AI and Cloud Computing. More coming soon.", "tags": ["AI", "Cloud"], "link": "", "label": ""}
+ ],
+ "colors": {},
+ "photo": ""
+};
+/*CFG_END*/
+/* ================================================== */
+
+const $ = (s, r=document) => r.querySelector(s), $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeLink = u => /^(https?:\/\/|#|mailto:)/i.test(u || '') ? u : '';
+
+/* text you can click-to-edit while the panel is open */
+const EDIT_SEL = '#leadtxt, .hero h1, .hero .chip, .marquee span, .sec-head h2, .sec-head p, .sec-head .eyebrow, .panel h3, .panel .chip, .strengths b, .strengths small, .owl-note h4, .owl-note p, .plan-row dt, .plan-row dd, .tracker h3, .week h4, .checks h4, .checks li, .refl .chip, .refl p, .path b, .path span, .outro h2, .outro p, .outro .chip, footer span';
+
+/* ----- is this the owner? (file on your computer, or ?edit once) ----- */
+const canEdit = (() => {
+  try { if (/[?&]edit\b/.test(location.search)) store.set('rg_owner', '1'); } catch(e) {}
+  return location.protocol === 'file:' || store.get('rg_owner') === '1';
+})();
+
+/* ----- draft (only used for the owner, and only if it was made from this exact file) ----- */
+const DKEY = 'rg_draft_v1', BASE = JSON.stringify(CFG);
+let cfg = JSON.parse(BASE), draftEdits = null;
+if (canEdit) {
+  try {
+    const d = JSON.parse(store.get(DKEY) || 'null');
+    if (d && d.base === BASE && d.cfg) { cfg = Object.assign(cfg, d.cfg); draftEdits = d.edits || null; }
+  } catch(e) {}
+}
+const save = () => store.set(DKEY, JSON.stringify({base: BASE, cfg, edits: $$(EDIT_SEL).map(e => e.innerHTML)}));
+if (draftEdits) { const els = $$(EDIT_SEL); if (els.length === draftEdits.length) els.forEach((e, i) => e.innerHTML = draftEdits[i]); }
+
+/* ----- floating hearts ----- */
+(() => {
+  const f = $('#float'), sym = ['♡','✿','✦','✧','♡'];
+  for (let i = 0; i < 14; i++) {
+    const s = document.createElement('span');
+    s.textContent = sym[i % sym.length];
+    s.style.left = Math.random()*100 + '%';
+    s.style.fontSize = 14 + Math.random()*18 + 'px';
+    s.style.color = i % 2 ? 'var(--pink-d)' : 'var(--blue-d)';
+    s.style.animationDuration = 14 + Math.random()*16 + 's';
+    s.style.animationDelay = -Math.random()*20 + 's';
+    f.appendChild(s);
+  }
+})();
+
+/* ----- theme ----- */
+(() => {
+  const root = document.documentElement, b = $('#theme');
+  const set = t => { root.dataset.theme = t; b.textContent = t === 'night' ? '☀' : '☾'; store.set('theme', t); };
+  set(store.get('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day'));
+  b.onclick = () => set(root.dataset.theme === 'night' ? 'day' : 'night');
+})();
+
+/* ----- colors ----- */
+const COLOR_VARS = {blue:'--blue', pink:'--pink', blued:'--blue-d', pinkd:'--pink-d', bg:'--bg', ink:'--ink'};
+const COLOR_DEF  = {blue:'#b9d9f5', pink:'#f8d9e4', blued:'#8fbfe8', pinkd:'#f2a9c4', bg:'#e3eefa', ink:'#4a3a33'};
+const COLOR_NAME = {blue:'Main blue', pink:'Main pink', blued:'Accent blue (hearts, dots)', pinkd:'Accent pink (hearts, dots)', bg:'Page background', ink:'Text & outlines'};
+function applyColors() {
+  const rules = Object.keys(COLOR_VARS).filter(k => cfg.colors && /^#[0-9a-f]{6}$/i.test(cfg.colors[k] || '')).map(k => `${COLOR_VARS[k]}:${cfg.colors[k]}`);
+  $('#custom').textContent = rules.length ? ':root{' + rules.join(';') + '}' : '';
+}
+
+/* ----- skills ----- */
+function renderSkills(imm) {
+  $('#skills').innerHTML = cfg.skills.map(([n, v]) =>
+    `<div class="skill"><span>${esc(n)}</span><span class="dots${imm ? '' : ' pre'}" data-v="${+v || 0}" aria-label="${+v || 0} out of 5">${[0,1,2,3,4].map(k => `<i class="${imm && k < v ? 'f' : ''}"></i>`).join('')}</span></div>`).join('');
+}
+
+/* ----- works ----- */
+function renderWorks() {
+  $('#worksGrid').innerHTML = cfg.works.map(w => {
+    const link = safeLink(w.link);
+    return `<article class="card work reveal in" data-c="${esc(w.c)}">
+      <div class="top"><span class="status ${/progress/i.test(w.s) ? 'prog' : ''}">${esc(w.s)}</span></div>
+      <h3>${esc(w.t)}</h3><p>${esc(w.d)}</p>
+      <div class="meta">${(w.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+      ${link ? `<a class="go" href="${esc(link)}">${esc(w.label || 'Open →')}</a>` : ''}
+    </article>`;
+  }).join('');
+  applyFilter();
+}
+function applyFilter() {
+  const f = ($('.filters button[aria-pressed="true"]') || {dataset:{f:'all'}}).dataset.f;
+  $$('.work').forEach(c => c.classList.toggle('hide', f !== 'all' && c.dataset.c !== f));
+}
+$$('.filters button').forEach(b => b.onclick = () => {
+  $$('.filters button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  applyFilter();
+});
+
+/* ----- photo ----- */
+function renderPhoto() {
+  const has = !!cfg.photo;
+  $('#photo').classList.toggle('gone', !has);
+  $('#owl').classList.toggle('gone', has);
+  $('#bubble').classList.toggle('gone', has);
+  if (has) $('#photo').src = cfg.photo; else $('#photo').removeAttribute('src');
+}
+
+renderSkills(false); renderWorks(); applyColors(); renderPhoto();
+
+/* ----- tracker ----- */
+const HEART = '<svg viewBox="0 0 64 60"><path d="M32 56 C8 38 4 24 8 15 C13 4 28 5 32 16 C36 5 51 4 56 15 C60 24 56 38 32 56 Z"/></svg>';
+(() => {
+  const saved = JSON.parse(store.get('tracker') || 'null');
+  const hs = $$('.heart');
+  hs.forEach((h, i) => { h.innerHTML = HEART; if (saved) h.setAttribute('aria-pressed', !!saved[i]); });
+  const paint = () => $$('.hearts').forEach(g => {
+    const n = $$('.heart[aria-pressed="true"]', g).length;
+    $('.count', g).textContent = n + ' / 3';
+    $('.bar i', g.parentElement).style.width = (n/3*100) + '%';
+  });
+  const saveT = () => store.set('tracker', JSON.stringify(hs.map(h => h.getAttribute('aria-pressed') === 'true')));
+  hs.forEach(h => h.onclick = () => {
+    h.setAttribute('aria-pressed', h.getAttribute('aria-pressed') !== 'true');
+    h.classList.remove('pulse'); void h.offsetWidth; h.classList.add('pulse');
+    paint(); saveT();
+  });
+  $('#reset').onclick = () => { hs.forEach(h => h.setAttribute('aria-pressed', 'false')); paint(); saveT(); };
+  paint();
+})();
+
+/* ----- reveal + skill dots ----- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('in'); io.unobserve(e.target);
+  $$('.dots.pre', e.target).forEach(d => {
+    const v = +d.dataset.v;
+    $$('i', d).forEach((i, k) => setTimeout(() => { if (k < v) i.classList.add('f'); }, 120*k));
+    d.classList.remove('pre');
+  });
+}), {threshold:.15});
+$$('.reveal:not(.in)').forEach(el => io.observe(el));
+
+/* ----- nav highlight ----- */
+const links = $$('a.l');
+const so = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id));
+}), {rootMargin:'-45% 0px -50% 0px'});
+$$('section[id]').forEach(s => so.observe(s));
+
+/* ----- typed role ----- */
+(() => {
+  const el = $('#typed');
+  const list = () => (cfg.words && cfg.words.length ? cfg.words : ['hello!']);
+  el.textContent = list()[0];
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let w = 0, c = list()[0].length, del = true;
+  (function tick() {
+    const ws = list(), word = ws[w % ws.length];
+    el.textContent = word.slice(0, c);
+    if (!del) { if (c < word.length) { c++; return setTimeout(tick, 70); } del = true; return setTimeout(tick, 1600); }
+    if (c > 0) { c--; return setTimeout(tick, 35); }
+    del = false; w++; return setTimeout(tick, 250);
+  })();
+})();
+
+/* ----- owl eyes follow the pointer; click for a chat bubble ----- */
+(() => {
+  const svg = $('#owl'), eyes = $$('.eye', svg), bubble = $('#bubble');
+  const say = ['hi hi!', 'hoo is there? 👀', "what's the goal?", 'you got this ♡', 'tiny steps count ✦', 'ask for help early!'];
+  let k = 0;
+  addEventListener('pointermove', e => {
+    const r = svg.getBoundingClientRect(); if (!r.width) return;
+    const s = r.width / 240;
+    eyes.forEach(g => {
+      const cx = r.left + g.dataset.cx * s, cy = r.top + g.dataset.cy * s;
+      const dx = e.clientX - cx, dy = e.clientY - cy, d = Math.hypot(dx, dy) || 1, m = Math.min(8, d / 14);
+      g.setAttribute('transform', `translate(${dx/d*m} ${dy/d*m})`);
+    });
+  });
+  svg.style.cursor = 'pointer';
+  svg.addEventListener('click', () => { k = (k + 1) % say.length; bubble.textContent = say[k]; });
+})();
+
+/* ================== EDIT MODE ================== */
+(() => {
+  if (!canEdit) return;
+  const btn = $('#edBtn'), panel = $('#editor');
+  btn.classList.remove('gone');
+
+  const setEditing = on => {
+    document.body.classList.toggle('editing', on);
+    $$(EDIT_SEL).forEach(el => {
+      if (on) { el.setAttribute('contenteditable', 'true'); el.setAttribute('spellcheck', 'false'); }
+      else { el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); }
+    });
+  };
+  const open = on => { panel.classList.toggle('gone', !on); btn.classList.toggle('gone', on); setEditing(on); if (!on) save(); };
+  btn.onclick = () => open(true);
+  $('#edClose').onclick = () => open(false);
+
+  /* plain-text paste and no line breaks in click-to-edit text */
+  document.addEventListener('paste', e => {
+    if (!e.target.closest || !e.target.closest('[contenteditable="true"]')) return;
+    e.preventDefault();
+    document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s*\n\s*/g, ' '));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.closest && e.target.closest('[contenteditable="true"]')) e.preventDefault();
+  });
+  document.addEventListener('input', e => { if (e.target.closest && e.target.closest('[contenteditable="true"]')) save(); });
+
+  /* hero words + picture */
+  const words = $('#edWords');
+  words.value = cfg.words.join(', ');
+  words.oninput = () => { cfg.words = words.value.split(',').map(s => s.trim()).filter(Boolean); save(); };
+  $('#edPhoto').onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    const img = new Image(), url = URL.createObjectURL(f);
+    img.onload = () => {
+      const side = Math.min(img.width, img.height), out = Math.min(640, side);
+      const cv = document.createElement('canvas'); cv.width = cv.height = out;
+      cv.getContext('2d').drawImage(img, (img.width - side)/2, (img.height - side)/2, side, side, 0, 0, out, out);
+      cfg.photo = cv.toDataURL('image/jpeg', .85);
+      URL.revokeObjectURL(url); renderPhoto(); save();
+    };
+    img.src = url;
+  };
+  $('#edNoPhoto').onclick = () => { cfg.photo = ''; $('#edPhoto').value = ''; renderPhoto(); save(); };
+
+  /* colors */
+  const colorsEd = () => {
+    $('#edColors').innerHTML = Object.keys(COLOR_VARS).map(k =>
+      `<label class="ed-color"><span>${COLOR_NAME[k]}</span><input type="color" data-k="${k}" value="${(cfg.colors && cfg.colors[k]) || COLOR_DEF[k]}"></label>`).join('');
+  };
+  colorsEd();
+  $('#edColors').oninput = e => { const k = e.target.dataset.k; if (!k) return; cfg.colors = cfg.colors || {}; cfg.colors[k] = e.target.value; applyColors(); save(); };
+  $('#edColorReset').onclick = () => { cfg.colors = {}; applyColors(); colorsEd(); save(); };
+
+  /* projects */
+  const worksEd = (openLast) => {
+    $('#edWorks').innerHTML = cfg.works.map((w, i) => `
+      <details class="ed-item" data-i="${i}"><summary>${esc(w.t || 'Untitled')}</summary>
+        <label>Title<input data-k="t" value="${esc(w.t)}"></label>
+        <label>Category<select data-k="c"><option value="self"${w.c === 'self' ? ' selected' : ''}>Self-development</option><option value="tech"${w.c === 'tech' ? ' selected' : ''}>Tech &amp; learning</option></select></label>
+        <label>Status (Done, Live, In progress…)<input data-k="s" value="${esc(w.s)}"></label>
+        <label>Description<textarea data-k="d" rows="3">${esc(w.d)}</textarea></label>
+        <label>Tags (separate with commas)<input data-k="tags" value="${esc((w.tags || []).join(', '))}"></label>
+        <label>Link (https://… or leave empty)<input data-k="link" value="${esc(w.link || '')}"></label>
+        <label>Link text<input data-k="label" value="${esc(w.label || '')}"></label>
+        <button type="button" class="ed-mini danger" data-del="${i}">🗑 Delete project</button>
+      </details>`).join('');
+    if (openLast) { const last = $('#edWorks .ed-item:last-child'); if (last) last.open = true; }
+  };
+  worksEd();
+  $('#edWorks').addEventListener('input', e => {
+    const item = e.target.closest('.ed-item'), k = e.target.dataset.k; if (!item || !k) return;
+    const w = cfg.works[+item.dataset.i];
+    w[k] = k === 'tags' ? e.target.value.split(',').map(s => s.trim()).filter(Boolean) : e.target.value;
+    if (k === 't') $('summary', item).textContent = e.target.value || 'Untitled';
+    renderWorks(); save();
+  });
+  $('#edWorks').addEventListener('click', e => {
+    const d = e.target.closest('[data-del]'); if (!d) return;
+    cfg.works.splice(+d.dataset.del, 1); worksEd(); renderWorks(); save();
+  });
+  $('#addWork').onclick = () => {
+    cfg.works.push({t:'New project', c:'tech', s:'In progress', d:'Describe it here.', tags:['New'], link:'', label:''});
+    worksEd(true); renderWorks(); save();
+  };
+
+  /* skills */
+  const skillsEd = () => {
+    $('#edSkills').innerHTML = cfg.skills.map(([n, v], i) =>
+      `<div class="ed-skill" data-i="${i}"><input data-k="n" value="${esc(n)}" aria-label="Skill name"><input data-k="v" type="number" min="1" max="5" value="${+v || 1}" aria-label="Level 1 to 5"><button type="button" class="ed-mini danger" data-del="${i}" aria-label="Delete skill">🗑</button></div>`).join('');
+  };
+  skillsEd();
+  $('#edSkills').addEventListener('input', e => {
+    const row = e.target.closest('.ed-skill'), k = e.target.dataset.k; if (!row || !k) return;
+    const s = cfg.skills[+row.dataset.i];
+    if (k === 'n') s[0] = e.target.value; else s[1] = Math.max(1, Math.min(5, +e.target.value || 1));
+    renderSkills(true); save();
+  });
+  $('#edSkills').addEventListener('click', e => {
+    const d = e.target.closest('[data-del]'); if (!d) return;
+    cfg.skills.splice(+d.dataset.del, 1); skillsEd(); renderSkills(true); save();
+  });
+  $('#addSkill').onclick = () => { cfg.skills.push(['New skill', 1]); skillsEd(); renderSkills(true); save(); };
+
+  /* reset draft */
+  $('#edReset').onclick = () => {
+    if (confirm('Throw away your unsaved changes and go back to the file as it is?')) { store.set(DKEY, ''); location.reload(); }
+  };
+
+  /* download a ready-to-upload index.html with everything baked in */
+  $('#edDownload').onclick = () => {
+    const c = document.documentElement.cloneNode(true);
+    c.removeAttribute('data-theme'); c.removeAttribute('style');
+    $('#editor', c).classList.add('gone'); $('#edBtn', c).classList.add('gone');
+    ['#float', '#worksGrid', '#skills', '#custom', '#edColors', '#edWorks', '#edSkills'].forEach(s => { const n = $(s, c); if (n) n.textContent = ''; });
+    const body = $('body', c); body.classList.remove('editing'); if (!body.className) body.removeAttribute('class');
+    $$('[contenteditable],[spellcheck]', c).forEach(n => { n.removeAttribute('contenteditable'); n.removeAttribute('spellcheck'); });
+    $$('.in', c).forEach(n => n.classList.remove('in'));
+    $$('.on', c).forEach(n => n.classList.remove('on'));
+    $$('.filters button', c).forEach(b => b.setAttribute('aria-pressed', b.dataset.f === 'all'));
+    $$('.heart', c).forEach(h => { h.textContent = ''; h.setAttribute('aria-pressed', 'true'); });
+    $$('.count', c).forEach(n => n.textContent = '3 / 3');
+    $$('.bar i', c).forEach(n => n.removeAttribute('style'));
+    $$('.eye', c).forEach(n => n.removeAttribute('transform'));
+    const o = $('#owl', c); o.removeAttribute('style'); o.classList.remove('gone');
+    const b = $('#bubble', c); b.classList.remove('gone'); b.textContent = 'hi hi!';
+    const p = $('#photo', c); p.classList.add('gone'); p.removeAttribute('src');
+    $('#typed', c).textContent = (cfg.words[0] || 'hello!');
+    const t = $('#theme', c); if (t) t.textContent = '☾';
+    const app = $('#app', c);
+    app.textContent = app.textContent.replace(/\/\*CFG_START\*\/[\s\S]*?\/\*CFG_END\*\//,
+      () => '/*CFG_START*/\nconst CFG = ' + JSON.stringify(cfg, null, 1).replace(/</g, '\\u003c') + ';\n/*CFG_END*/');
+    const blob = new Blob(['<!doctype html>\n' + c.outerHTML], {type: 'text/html'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'index.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  };
+})();
+</script>
+</body>
+</html>
