@@ -182,7 +182,41 @@ footer b{color:var(--pink-d)}
   *{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}.reveal{opacity:1;transform:none}.float{display:none}
 }
+
+/* helpers + edit mode */
+.gone{display:none!important}
+.photo{width:min(300px,80%);aspect-ratio:1;object-fit:cover;border:4px solid var(--ink);border-radius:46% 54% 50% 50%/52% 48% 54% 46%;box-shadow:10px 10px 0 var(--pink-d);animation:bob 4s ease-in-out infinite}
+.edbtn{position:fixed;right:18px;bottom:18px;z-index:150}
+.editor{position:fixed;top:0;right:0;bottom:0;width:min(390px,100vw);z-index:200;display:flex;flex-direction:column;background:var(--card);color:var(--ink);border-left:3px solid var(--ink);box-shadow:-8px 0 0 var(--shadow)}
+.ed-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:3px solid var(--ink);background:var(--pink);font:700 1.2rem var(--head)}
+.ed-head button{border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:50%;width:34px;height:34px;cursor:pointer;font-weight:800}
+.ed-body{flex:1;overflow:auto;padding:14px 18px}
+.ed-tip{background:var(--blue);border:2px solid var(--ink);border-radius:14px;padding:10px 12px;font-size:.9rem;margin-bottom:14px}
+.editor details{border:2px solid var(--ink);border-radius:16px;margin-bottom:12px;padding:10px 14px;background:var(--bg)}
+.editor summary{font:700 1.05rem var(--head);cursor:pointer}
+.editor details[open]>summary{margin-bottom:10px}
+.editor label{display:block;font-weight:700;font-size:.85rem;margin:10px 0 0}
+.editor input:not([type=color]):not([type=file]),.editor textarea,.editor select{display:block;width:100%;margin-top:4px;font:inherit;font-weight:400;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:10px;padding:7px 10px}
+.editor input[type=file]{margin-top:6px;font-size:.85rem;max-width:100%}
+.editor small{display:block;color:var(--muted);margin-top:8px;font-size:.8rem}
+.ed-color{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ed-color input{width:46px;height:32px;border:2px solid var(--ink);border-radius:8px;padding:0;background:none;cursor:pointer}
+.ed-item{background:var(--card)!important}
+.ed-skill{display:grid;grid-template-columns:1fr 64px 40px;gap:8px;margin-bottom:8px;align-items:center}
+.ed-skill input{margin:0!important}
+.ed-mini{margin-top:12px;font:700 .85rem var(--body);color:var(--ink);background:var(--pink);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
+.ed-mini.danger{background:var(--card)}
+.ed-skill .ed-mini{margin:0;padding:6px 0}
+.ed-foot{padding:14px 18px;border-top:3px solid var(--ink);background:var(--bg)}
+.ed-foot .btn{width:100%;justify-content:center}
+.ed-foot p{font-size:.82rem;color:var(--muted);margin:10px 0 4px}
+.ed-link{background:none;border:0;color:var(--muted);text-decoration:underline;font:700 .82rem var(--body);cursor:pointer}
+body.editing [contenteditable="true"]{cursor:text;border-radius:6px}
+body.editing [contenteditable="true"]:hover{outline:2px dashed var(--accent);outline-offset:3px}
+body.editing [contenteditable="true"]:focus{outline:2px solid var(--accent);outline-offset:3px}
+@media(min-width:900px){body.editing{padding-right:0}}
 </style>
+<style id="custom"></style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -206,13 +240,14 @@ footer b{color:var(--pink-d)}
         <span class="chip">IR001 · Future-Ready Tech Portfolio</span>
         <h1>Hi, I'm <em>Rigel</em>.</h1>
         <p class="lead"><span class="role" id="typed">aspiring tech professional</span><br>
-        Learning AI and Cloud Computing, one little step at a time, and getting better at speaking up along the way.</p>
+        <span id="leadtxt">Learning AI and Cloud Computing, one little step at a time, and getting better at speaking up along the way.</span></p>
         <div class="cta">
           <a class="btn" href="#works">Explore my work ✦</a>
           <a class="btn alt" href="#about">Get to know me</a>
         </div>
       </div>
       <div class="mascot">
+        <img id="photo" class="photo gone" alt="Rigel">
         <div class="bubble" id="bubble">hi hi!</div>
         <svg id="owl" viewBox="0 0 240 270" role="img" aria-label="A friendly cartoon owl">
           <g stroke="#4a3a33" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
@@ -386,23 +421,88 @@ footer b{color:var(--pink-d)}
   </div>
 </footer>
 
-<script>
-/* ===== EDIT YOUR CONTENT HERE ===== */
-const SKILLS = [
-  ["Collaboration", 4], ["Reflection", 4], ["HTML & CSS", 3], ["Cloud basics", 2], ["AI literacy", 2]
-];
-const WORKS = [
-  {t:"Focus on Shared Goals", c:"self", s:"Done", d:"A two-week Conflict Management plan: state one shared goal with people I'm not close to, then log and rate it.", tags:["Self-development","Conflict management"], link:"#plan", label:"See the plan →"},
-  {t:"My Future-Ready Tech Portfolio", c:"tech", s:"Live", d:"IR001 portfolio: a little space to learn and grow, built with HTML, CSS and a bit of JavaScript.", tags:["Web","Portfolio"], link:"#top", label:"You're here ✿"},
-  {t:"CS 101 · Intro to Computing", c:"tech", s:"In progress", d:"My foundation course at CIIT: how computers think, and how to tell them what to do.", tags:["Coursework","Fundamentals"]},
-  {t:"AI & Cloud learning notes", c:"tech", s:"In progress", d:"Notes and small experiments as I explore AI and Cloud Computing. More coming soon.", tags:["AI","Cloud"]}
-];
-/* ================================== */
+<button id="edBtn" class="btn edbtn gone" type="button">✎ Customize</button>
+<aside id="editor" class="editor gone" aria-label="Customize this site">
+  <div class="ed-head"><b>Customize ♡</b><button id="edClose" type="button" aria-label="Close panel">✕</button></div>
+  <div class="ed-body">
+    <p class="ed-tip">✎ Tip: with this panel open, <b>click any text on the page</b> to retype it.</p>
+
+    <details open><summary>Hero</summary>
+      <label>Rotating words (separate with commas)<input id="edWords"></label>
+      <label>Hero picture (optional)<input id="edPhoto" type="file" accept="image/*"></label>
+      <button type="button" class="ed-mini" id="edNoPhoto">Use the owl instead</button>
+      <small>Pictures are cropped to a square and stored inside your website file, so anyone can see them once published.</small>
+    </details>
+
+    <details><summary>Colors</summary>
+      <div id="edColors"></div>
+      <button type="button" class="ed-mini" id="edColorReset">Reset colors</button>
+    </details>
+
+    <details><summary>Projects</summary>
+      <div id="edWorks"></div>
+      <button type="button" class="ed-mini" id="addWork">+ Add project</button>
+    </details>
+
+    <details><summary>Skills</summary>
+      <div id="edSkills"></div>
+      <button type="button" class="ed-mini" id="addSkill">+ Add skill</button>
+    </details>
+  </div>
+  <div class="ed-foot">
+    <button type="button" class="btn" id="edDownload">⬇ Download website</button>
+    <p>Your changes save in this browser automatically. To publish: download, then upload the new <b>index.html</b> to your GitHub repo.</p>
+    <button type="button" class="ed-link" id="edReset">Reset my draft</button>
+  </div>
+</aside>
+
+<script id="app">
+/* ================== YOUR CONTENT ==================
+   Easiest way to change it: open this page on your computer (or add ?edit to the web address),
+   then click ✎ Customize. You can also edit the block below by hand. */
+/*CFG_START*/
+const CFG = {
+ "words": ["aspiring tech professional", "AI & Cloud learner", "win-win Owl", "always growing"],
+ "skills": [["Collaboration", 4], ["Reflection", 4], ["HTML & CSS", 3], ["Cloud basics", 2], ["AI literacy", 2]],
+ "works": [
+  {"t": "Focus on Shared Goals", "c": "self", "s": "Done", "d": "A two-week Conflict Management plan: state one shared goal with people I'm not close to, then log and rate it.", "tags": ["Self-development", "Conflict management"], "link": "#plan", "label": "See the plan →"},
+  {"t": "My Future-Ready Tech Portfolio", "c": "tech", "s": "Live", "d": "IR001 portfolio: a little space to learn and grow, built with HTML, CSS and a bit of JavaScript.", "tags": ["Web", "Portfolio"], "link": "#top", "label": "You're here ✿"},
+  {"t": "CS 101 · Intro to Computing", "c": "tech", "s": "In progress", "d": "My foundation course at CIIT: how computers think, and how to tell them what to do.", "tags": ["Coursework", "Fundamentals"], "link": "", "label": ""},
+  {"t": "AI & Cloud learning notes", "c": "tech", "s": "In progress", "d": "Notes and small experiments as I explore AI and Cloud Computing. More coming soon.", "tags": ["AI", "Cloud"], "link": "", "label": ""}
+ ],
+ "colors": {},
+ "photo": ""
+};
+/*CFG_END*/
+/* ================================================== */
 
 const $ = (s, r=document) => r.querySelector(s), $$ = (s, r=document) => [...r.querySelectorAll(s)];
 const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeLink = u => /^(https?:\/\/|#|mailto:)/i.test(u || '') ? u : '';
 
-/* floating hearts */
+/* text you can click-to-edit while the panel is open */
+const EDIT_SEL = '#leadtxt, .hero h1, .hero .chip, .marquee span, .sec-head h2, .sec-head p, .sec-head .eyebrow, .panel h3, .panel .chip, .strengths b, .strengths small, .owl-note h4, .owl-note p, .plan-row dt, .plan-row dd, .tracker h3, .week h4, .checks h4, .checks li, .refl .chip, .refl p, .path b, .path span, .outro h2, .outro p, .outro .chip, footer span';
+
+/* ----- is this the owner? (file on your computer, or ?edit once) ----- */
+const canEdit = (() => {
+  try { if (/[?&]edit\b/.test(location.search)) store.set('rg_owner', '1'); } catch(e) {}
+  return location.protocol === 'file:' || store.get('rg_owner') === '1';
+})();
+
+/* ----- draft (only used for the owner, and only if it was made from this exact file) ----- */
+const DKEY = 'rg_draft_v1', BASE = JSON.stringify(CFG);
+let cfg = JSON.parse(BASE), draftEdits = null;
+if (canEdit) {
+  try {
+    const d = JSON.parse(store.get(DKEY) || 'null');
+    if (d && d.base === BASE && d.cfg) { cfg = Object.assign(cfg, d.cfg); draftEdits = d.edits || null; }
+  } catch(e) {}
+}
+const save = () => store.set(DKEY, JSON.stringify({base: BASE, cfg, edits: $$(EDIT_SEL).map(e => e.innerHTML)}));
+if (draftEdits) { const els = $$(EDIT_SEL); if (els.length === draftEdits.length) els.forEach((e, i) => e.innerHTML = draftEdits[i]); }
+
+/* ----- floating hearts ----- */
 (() => {
   const f = $('#float'), sym = ['♡','✿','✦','✧','♡'];
   for (let i = 0; i < 14; i++) {
@@ -417,7 +517,7 @@ const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}},
   }
 })();
 
-/* theme */
+/* ----- theme ----- */
 (() => {
   const root = document.documentElement, b = $('#theme');
   const set = t => { root.dataset.theme = t; b.textContent = t === 'night' ? '☀' : '☾'; store.set('theme', t); };
@@ -425,24 +525,55 @@ const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}},
   b.onclick = () => set(root.dataset.theme === 'night' ? 'day' : 'night');
 })();
 
-/* skills */
-$('#skills').innerHTML = SKILLS.map(([n, v]) =>
-  `<div class="skill"><span>${n}</span><span class="dots pre" data-v="${v}" aria-label="${v} out of 5">${'<i></i>'.repeat(5)}</span></div>`).join('');
+/* ----- colors ----- */
+const COLOR_VARS = {blue:'--blue', pink:'--pink', blued:'--blue-d', pinkd:'--pink-d', bg:'--bg', ink:'--ink'};
+const COLOR_DEF  = {blue:'#b9d9f5', pink:'#f8d9e4', blued:'#8fbfe8', pinkd:'#f2a9c4', bg:'#e3eefa', ink:'#4a3a33'};
+const COLOR_NAME = {blue:'Main blue', pink:'Main pink', blued:'Accent blue (hearts, dots)', pinkd:'Accent pink (hearts, dots)', bg:'Page background', ink:'Text & outlines'};
+function applyColors() {
+  const rules = Object.keys(COLOR_VARS).filter(k => cfg.colors && /^#[0-9a-f]{6}$/i.test(cfg.colors[k] || '')).map(k => `${COLOR_VARS[k]}:${cfg.colors[k]}`);
+  $('#custom').textContent = rules.length ? ':root{' + rules.join(';') + '}' : '';
+}
 
-/* works */
-$('#worksGrid').innerHTML = WORKS.map(w => `
-  <article class="card work reveal" data-c="${w.c}">
-    <div class="top"><span class="status ${w.s==='In progress'?'prog':''}">${w.s}</span></div>
-    <h3>${w.t}</h3><p>${w.d}</p>
-    <div class="meta">${w.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-    ${w.link ? `<a class="go" href="${w.link}">${w.label}</a>` : ''}
-  </article>`).join('');
+/* ----- skills ----- */
+function renderSkills(imm) {
+  $('#skills').innerHTML = cfg.skills.map(([n, v]) =>
+    `<div class="skill"><span>${esc(n)}</span><span class="dots${imm ? '' : ' pre'}" data-v="${+v || 0}" aria-label="${+v || 0} out of 5">${[0,1,2,3,4].map(k => `<i class="${imm && k < v ? 'f' : ''}"></i>`).join('')}</span></div>`).join('');
+}
+
+/* ----- works ----- */
+function renderWorks() {
+  $('#worksGrid').innerHTML = cfg.works.map(w => {
+    const link = safeLink(w.link);
+    return `<article class="card work reveal in" data-c="${esc(w.c)}">
+      <div class="top"><span class="status ${/progress/i.test(w.s) ? 'prog' : ''}">${esc(w.s)}</span></div>
+      <h3>${esc(w.t)}</h3><p>${esc(w.d)}</p>
+      <div class="meta">${(w.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+      ${link ? `<a class="go" href="${esc(link)}">${esc(w.label || 'Open →')}</a>` : ''}
+    </article>`;
+  }).join('');
+  applyFilter();
+}
+function applyFilter() {
+  const f = ($('.filters button[aria-pressed="true"]') || {dataset:{f:'all'}}).dataset.f;
+  $$('.work').forEach(c => c.classList.toggle('hide', f !== 'all' && c.dataset.c !== f));
+}
 $$('.filters button').forEach(b => b.onclick = () => {
   $$('.filters button').forEach(x => x.setAttribute('aria-pressed', x === b));
-  $$('.work').forEach(c => c.classList.toggle('hide', b.dataset.f !== 'all' && c.dataset.c !== b.dataset.f));
+  applyFilter();
 });
 
-/* tracker */
+/* ----- photo ----- */
+function renderPhoto() {
+  const has = !!cfg.photo;
+  $('#photo').classList.toggle('gone', !has);
+  $('#owl').classList.toggle('gone', has);
+  $('#bubble').classList.toggle('gone', has);
+  if (has) $('#photo').src = cfg.photo; else $('#photo').removeAttribute('src');
+}
+
+renderSkills(false); renderWorks(); applyColors(); renderPhoto();
+
+/* ----- tracker ----- */
 const HEART = '<svg viewBox="0 0 64 60"><path d="M32 56 C8 38 4 24 8 15 C13 4 28 5 32 16 C36 5 51 4 56 15 C60 24 56 38 32 56 Z"/></svg>';
 (() => {
   const saved = JSON.parse(store.get('tracker') || 'null');
@@ -453,57 +584,59 @@ const HEART = '<svg viewBox="0 0 64 60"><path d="M32 56 C8 38 4 24 8 15 C13 4 28
     $('.count', g).textContent = n + ' / 3';
     $('.bar i', g.parentElement).style.width = (n/3*100) + '%';
   });
-  const save = () => store.set('tracker', JSON.stringify(hs.map(h => h.getAttribute('aria-pressed') === 'true')));
+  const saveT = () => store.set('tracker', JSON.stringify(hs.map(h => h.getAttribute('aria-pressed') === 'true')));
   hs.forEach(h => h.onclick = () => {
     h.setAttribute('aria-pressed', h.getAttribute('aria-pressed') !== 'true');
     h.classList.remove('pulse'); void h.offsetWidth; h.classList.add('pulse');
-    paint(); save();
+    paint(); saveT();
   });
-  $('#reset').onclick = () => { hs.forEach(h => h.setAttribute('aria-pressed', 'false')); paint(); save(); };
+  $('#reset').onclick = () => { hs.forEach(h => h.setAttribute('aria-pressed', 'false')); paint(); saveT(); };
   paint();
 })();
 
-/* reveal + skill dots */
+/* ----- reveal + skill dots ----- */
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
   e.target.classList.add('in'); io.unobserve(e.target);
-  $$('.dots', e.target).forEach(d => {
+  $$('.dots.pre', e.target).forEach(d => {
     const v = +d.dataset.v;
     $$('i', d).forEach((i, k) => setTimeout(() => { if (k < v) i.classList.add('f'); }, 120*k));
     d.classList.remove('pre');
   });
 }), {threshold:.15});
-$$('.reveal').forEach(el => io.observe(el));
+$$('.reveal:not(.in)').forEach(el => io.observe(el));
 
-/* nav highlight */
+/* ----- nav highlight ----- */
 const links = $$('a.l');
 const so = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id));
 }), {rootMargin:'-45% 0px -50% 0px'});
 $$('section[id]').forEach(s => so.observe(s));
 
-/* typed role */
+/* ----- typed role ----- */
 (() => {
-  const el = $('#typed'), words = ['aspiring tech professional', 'AI & Cloud learner', 'win-win Owl', 'always growing'];
+  const el = $('#typed');
+  const list = () => (cfg.words && cfg.words.length ? cfg.words : ['hello!']);
+  el.textContent = list()[0];
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let w = 0, c = words[0].length, del = true;
-  (function tick(){
-    const word = words[w];
+  let w = 0, c = list()[0].length, del = true;
+  (function tick() {
+    const ws = list(), word = ws[w % ws.length];
     el.textContent = word.slice(0, c);
-    if (del) { c--; if (c < 0) { del = false; w = (w+1) % words.length; c = 0; } }
-    else { c++; if (c > words[w].length) { del = true; c = words[w].length; return setTimeout(tick, 1600); } }
-    setTimeout(tick, del ? 35 : 70);
+    if (!del) { if (c < word.length) { c++; return setTimeout(tick, 70); } del = true; return setTimeout(tick, 1600); }
+    if (c > 0) { c--; return setTimeout(tick, 35); }
+    del = false; w++; return setTimeout(tick, 250);
   })();
-  setTimeout(()=>{}, 0);
 })();
 
-/* owl eyes follow the pointer; click for a chat bubble */
+/* ----- owl eyes follow the pointer; click for a chat bubble ----- */
 (() => {
   const svg = $('#owl'), eyes = $$('.eye', svg), bubble = $('#bubble');
   const say = ['hi hi!', 'hoo is there? 👀', "what's the goal?", 'you got this ♡', 'tiny steps count ✦', 'ask for help early!'];
   let k = 0;
   addEventListener('pointermove', e => {
-    const r = svg.getBoundingClientRect(), s = r.width / 240;
+    const r = svg.getBoundingClientRect(); if (!r.width) return;
+    const s = r.width / 240;
     eyes.forEach(g => {
       const cx = r.left + g.dataset.cx * s, cy = r.top + g.dataset.cy * s;
       const dx = e.clientX - cx, dy = e.clientY - cy, d = Math.hypot(dx, dy) || 1, m = Math.min(8, d / 14);
@@ -512,6 +645,147 @@ $$('section[id]').forEach(s => so.observe(s));
   });
   svg.style.cursor = 'pointer';
   svg.addEventListener('click', () => { k = (k + 1) % say.length; bubble.textContent = say[k]; });
+})();
+
+/* ================== EDIT MODE ================== */
+(() => {
+  if (!canEdit) return;
+  const btn = $('#edBtn'), panel = $('#editor');
+  btn.classList.remove('gone');
+
+  const setEditing = on => {
+    document.body.classList.toggle('editing', on);
+    $$(EDIT_SEL).forEach(el => {
+      if (on) { el.setAttribute('contenteditable', 'true'); el.setAttribute('spellcheck', 'false'); }
+      else { el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); }
+    });
+  };
+  const open = on => { panel.classList.toggle('gone', !on); btn.classList.toggle('gone', on); setEditing(on); if (!on) save(); };
+  btn.onclick = () => open(true);
+  $('#edClose').onclick = () => open(false);
+
+  /* plain-text paste and no line breaks in click-to-edit text */
+  document.addEventListener('paste', e => {
+    if (!e.target.closest || !e.target.closest('[contenteditable="true"]')) return;
+    e.preventDefault();
+    document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s*\n\s*/g, ' '));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.closest && e.target.closest('[contenteditable="true"]')) e.preventDefault();
+  });
+  document.addEventListener('input', e => { if (e.target.closest && e.target.closest('[contenteditable="true"]')) save(); });
+
+  /* hero words + picture */
+  const words = $('#edWords');
+  words.value = cfg.words.join(', ');
+  words.oninput = () => { cfg.words = words.value.split(',').map(s => s.trim()).filter(Boolean); save(); };
+  $('#edPhoto').onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    const img = new Image(), url = URL.createObjectURL(f);
+    img.onload = () => {
+      const side = Math.min(img.width, img.height), out = Math.min(640, side);
+      const cv = document.createElement('canvas'); cv.width = cv.height = out;
+      cv.getContext('2d').drawImage(img, (img.width - side)/2, (img.height - side)/2, side, side, 0, 0, out, out);
+      cfg.photo = cv.toDataURL('image/jpeg', .85);
+      URL.revokeObjectURL(url); renderPhoto(); save();
+    };
+    img.src = url;
+  };
+  $('#edNoPhoto').onclick = () => { cfg.photo = ''; $('#edPhoto').value = ''; renderPhoto(); save(); };
+
+  /* colors */
+  const colorsEd = () => {
+    $('#edColors').innerHTML = Object.keys(COLOR_VARS).map(k =>
+      `<label class="ed-color"><span>${COLOR_NAME[k]}</span><input type="color" data-k="${k}" value="${(cfg.colors && cfg.colors[k]) || COLOR_DEF[k]}"></label>`).join('');
+  };
+  colorsEd();
+  $('#edColors').oninput = e => { const k = e.target.dataset.k; if (!k) return; cfg.colors = cfg.colors || {}; cfg.colors[k] = e.target.value; applyColors(); save(); };
+  $('#edColorReset').onclick = () => { cfg.colors = {}; applyColors(); colorsEd(); save(); };
+
+  /* projects */
+  const worksEd = (openLast) => {
+    $('#edWorks').innerHTML = cfg.works.map((w, i) => `
+      <details class="ed-item" data-i="${i}"><summary>${esc(w.t || 'Untitled')}</summary>
+        <label>Title<input data-k="t" value="${esc(w.t)}"></label>
+        <label>Category<select data-k="c"><option value="self"${w.c === 'self' ? ' selected' : ''}>Self-development</option><option value="tech"${w.c === 'tech' ? ' selected' : ''}>Tech &amp; learning</option></select></label>
+        <label>Status (Done, Live, In progress…)<input data-k="s" value="${esc(w.s)}"></label>
+        <label>Description<textarea data-k="d" rows="3">${esc(w.d)}</textarea></label>
+        <label>Tags (separate with commas)<input data-k="tags" value="${esc((w.tags || []).join(', '))}"></label>
+        <label>Link (https://… or leave empty)<input data-k="link" value="${esc(w.link || '')}"></label>
+        <label>Link text<input data-k="label" value="${esc(w.label || '')}"></label>
+        <button type="button" class="ed-mini danger" data-del="${i}">🗑 Delete project</button>
+      </details>`).join('');
+    if (openLast) { const last = $('#edWorks .ed-item:last-child'); if (last) last.open = true; }
+  };
+  worksEd();
+  $('#edWorks').addEventListener('input', e => {
+    const item = e.target.closest('.ed-item'), k = e.target.dataset.k; if (!item || !k) return;
+    const w = cfg.works[+item.dataset.i];
+    w[k] = k === 'tags' ? e.target.value.split(',').map(s => s.trim()).filter(Boolean) : e.target.value;
+    if (k === 't') $('summary', item).textContent = e.target.value || 'Untitled';
+    renderWorks(); save();
+  });
+  $('#edWorks').addEventListener('click', e => {
+    const d = e.target.closest('[data-del]'); if (!d) return;
+    cfg.works.splice(+d.dataset.del, 1); worksEd(); renderWorks(); save();
+  });
+  $('#addWork').onclick = () => {
+    cfg.works.push({t:'New project', c:'tech', s:'In progress', d:'Describe it here.', tags:['New'], link:'', label:''});
+    worksEd(true); renderWorks(); save();
+  };
+
+  /* skills */
+  const skillsEd = () => {
+    $('#edSkills').innerHTML = cfg.skills.map(([n, v], i) =>
+      `<div class="ed-skill" data-i="${i}"><input data-k="n" value="${esc(n)}" aria-label="Skill name"><input data-k="v" type="number" min="1" max="5" value="${+v || 1}" aria-label="Level 1 to 5"><button type="button" class="ed-mini danger" data-del="${i}" aria-label="Delete skill">🗑</button></div>`).join('');
+  };
+  skillsEd();
+  $('#edSkills').addEventListener('input', e => {
+    const row = e.target.closest('.ed-skill'), k = e.target.dataset.k; if (!row || !k) return;
+    const s = cfg.skills[+row.dataset.i];
+    if (k === 'n') s[0] = e.target.value; else s[1] = Math.max(1, Math.min(5, +e.target.value || 1));
+    renderSkills(true); save();
+  });
+  $('#edSkills').addEventListener('click', e => {
+    const d = e.target.closest('[data-del]'); if (!d) return;
+    cfg.skills.splice(+d.dataset.del, 1); skillsEd(); renderSkills(true); save();
+  });
+  $('#addSkill').onclick = () => { cfg.skills.push(['New skill', 1]); skillsEd(); renderSkills(true); save(); };
+
+  /* reset draft */
+  $('#edReset').onclick = () => {
+    if (confirm('Throw away your unsaved changes and go back to the file as it is?')) { store.set(DKEY, ''); location.reload(); }
+  };
+
+  /* download a ready-to-upload index.html with everything baked in */
+  $('#edDownload').onclick = () => {
+    const c = document.documentElement.cloneNode(true);
+    c.removeAttribute('data-theme'); c.removeAttribute('style');
+    $('#editor', c).classList.add('gone'); $('#edBtn', c).classList.add('gone');
+    ['#float', '#worksGrid', '#skills', '#custom', '#edColors', '#edWorks', '#edSkills'].forEach(s => { const n = $(s, c); if (n) n.textContent = ''; });
+    const body = $('body', c); body.classList.remove('editing'); if (!body.className) body.removeAttribute('class');
+    $$('[contenteditable],[spellcheck]', c).forEach(n => { n.removeAttribute('contenteditable'); n.removeAttribute('spellcheck'); });
+    $$('.in', c).forEach(n => n.classList.remove('in'));
+    $$('.on', c).forEach(n => n.classList.remove('on'));
+    $$('.filters button', c).forEach(b => b.setAttribute('aria-pressed', b.dataset.f === 'all'));
+    $$('.heart', c).forEach(h => { h.textContent = ''; h.setAttribute('aria-pressed', 'true'); });
+    $$('.count', c).forEach(n => n.textContent = '3 / 3');
+    $$('.bar i', c).forEach(n => n.removeAttribute('style'));
+    $$('.eye', c).forEach(n => n.removeAttribute('transform'));
+    const o = $('#owl', c); o.removeAttribute('style'); o.classList.remove('gone');
+    const b = $('#bubble', c); b.classList.remove('gone'); b.textContent = 'hi hi!';
+    const p = $('#photo', c); p.classList.add('gone'); p.removeAttribute('src');
+    $('#typed', c).textContent = (cfg.words[0] || 'hello!');
+    const t = $('#theme', c); if (t) t.textContent = '☾';
+    const app = $('#app', c);
+    app.textContent = app.textContent.replace(/\/\*CFG_START\*\/[\s\S]*?\/\*CFG_END\*\//,
+      () => '/*CFG_START*/\nconst CFG = ' + JSON.stringify(cfg, null, 1).replace(/</g, '\\u003c') + ';\n/*CFG_END*/');
+    const blob = new Blob(['<!doctype html>\n' + c.outerHTML], {type: 'text/html'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'index.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  };
 })();
 </script>
 </body>
