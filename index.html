@@ -464,7 +464,7 @@ body.editing [data-emoji]{cursor:pointer}
   <div class="wrap">
     <span>IR001 · <b>My Future-Ready Tech Portfolio</b></span>
     <span>Module 6 · Ask for help early. ♡</span>
-    <span>Website built with AI assistance · content by Rigel</span>
+    <span><br></span>
   </div>
 </footer>
 
@@ -480,7 +480,7 @@ body.editing [data-emoji]{cursor:pointer}
   <div class="ed-body">
     <p class="ed-tip">✎ With this panel open, <b>click any text</b> to retype it and <b>click an emoji</b> to swap it. Lists get <b>✕</b> and <b>+ Add</b> buttons. Everything else is below.</p>
 
-    <details><summary>Hero &amp; mascot</summary>
+    <details open=""><summary>Hero &amp; mascot</summary>
       <label>Rotating words (separate with commas)<input id="edWords"></label>
       <label class="ed-color"><span>Show “currently learning” badge</span><input type="checkbox" id="edBadgeShow"></label>
       <label>Badge text<input id="edBadgeText" maxlength="60"></label>
@@ -516,7 +516,7 @@ body.editing [data-emoji]{cursor:pointer}
       <div id="edCustoms"></div>
     </details>
 
-    <details open=""><summary>Projects</summary>
+    <details><summary>Projects</summary>
       <div id="edWorks"></div>
       <button type="button" class="ed-mini" id="addWork">+ Add project</button>
     </details>
@@ -564,7 +564,7 @@ body.editing [data-emoji]{cursor:pointer}
   </div>
   <div class="ed-foot">
     <button type="button" class="btn" id="edDownload">⬇ Download website</button>
-    <div class="ed-frow"><span class="ed-status" id="edStatus"></span><button type="button" class="ed-linkbtn" id="edReset">Reset my draft</button></div>
+    <div class="ed-frow"><span class="ed-status" id="edStatus">✓ Draft saved in this browser</span><button type="button" class="ed-linkbtn" id="edReset">Reset my draft</button></div>
   </div>
 </aside>
 
@@ -739,7 +739,7 @@ const CFG = {
    "c": "Self-dev",
    "s": "DONE",
    "feat": false,
-   "d": "Describe it here.",
+   "d": "A",
    "detail": "",
    "images": [],
    "tags": [
